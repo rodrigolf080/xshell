@@ -1,0 +1,6 @@
+#!/bin/bash
+cd src/ && make && cd ..
+sleep 1
+./src/xsh 
+cd src/ && make clean && cd .. 
+clear
