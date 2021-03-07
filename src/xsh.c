@@ -7,11 +7,11 @@
 #include<readline/readline.h> 
 #include<readline/history.h> 
 
-#define MAXCOM 1000 // max number of letters to be supported 
-#define MAXLIST 100 // max number of commands to be supported 
+#define MAXCOM 1000 // max number of chars supported 
+#define MAXLIST 100 // max number of commands supported 
 
-// Clearing the shell using escape sequences 
-#define clear() printf("\033[H\033[J") 
+// Clearing the shell using escape sequence
+#define clear() printf("\033[H\033[J"); 
 
 
 // Greeting shell during startup 
