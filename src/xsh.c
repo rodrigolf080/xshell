@@ -55,6 +55,13 @@ void printDir()
     printf("%s", cwd); 
 } 
 
+// Function to print Path recursively starting on Current Dir/
+void printPath()
+{
+	// get pwd
+	// print
+}
+
 void execArgs(char** parsed) 
 { 
     // Forking a child 
@@ -135,10 +142,11 @@ void openHelp()
 { 
     puts("\n***WELCOME TO XSH HELP***"
         "\nList of Commands supported:"
-        "\n>clear"
+        "\n>cls"
         "\n>cd"
         "\n>ls"
         "\n>exit"
+        "\n>dir"
         "\n>all other general commands available in UNIX shell"
         "\n>pipe handling"
         "\n>improper space handling\n"); 
@@ -157,7 +165,8 @@ int ownCmdHandler(char** parsed)
     ListOfOwnCmds[1] = "cd"; 
     ListOfOwnCmds[2] = "help"; 
     ListOfOwnCmds[3] = "hello";
-    ListOfOwnCmds[4] = "clear"; 
+    ListOfOwnCmds[4] = "cls"; 
+    ListOfOwnCmds[5] = "dir";
   
     for (i = 0; i < NoOfOwnCmds; i++) { 
         if (strcmp(parsed[0], ListOfOwnCmds[i]) == 0) { 
@@ -173,7 +182,11 @@ int ownCmdHandler(char** parsed)
         clear(); 
         exit(0); 
     case 2: 
-        chdir(parsed[1]); 
+    	if (chdir(parsed[1]) == 0) {
+    		// ok
+    	} else {
+    		printf("\nPath not found.\n");
+    	}
         return 1; 
     case 3: 
         openHelp(); 
@@ -186,6 +199,8 @@ int ownCmdHandler(char** parsed)
         return 1;
     case 5:
         clear(); 
+    case 6:
+    	printPath();
     default: 
         break; 
     } 
