@@ -341,17 +341,12 @@ void execParsedArgs(char *inputString)
     if (execFlag == 2) {
         execArgsPiped(parsedArgs, parsedArgsPiped);
     }
-    //free(inputString);
-    //free(parsedArgsPiped);
-    //free(parsedArgs);
-    //free(execFlag);
 }
 
 void execScript(char **argv)
 {
     FILE *fp;
-    char buffer[1000];
-    char* buf;
+    char inputString[MAXCOM];
 
     if ((fp = fopen(argv[1], "r")) == NULL){
         printf("File >>> %s <<< not found.\n", argv[1]);
@@ -361,12 +356,11 @@ void execScript(char **argv)
     else {
         // open file and parse commands
         printf("Executing from file...\n");
-        while (fgets(buffer, 1000,fp) != NULL) {
-            buf = buffer;
-            add_history(buf);
+        while (fgets(inputString, MAXCOM,fp) != NULL) {
             // and execute command
-            execParsedArgs(buf);
-            //printf( "%s\n" , buffer); 
+            //execParsedArgs(inputString);
+            printf( "%s" , inputString);
+            printf("I am a new line!\n");
         }
         fclose(fp);
         exit(0);
