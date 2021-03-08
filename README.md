@@ -1,9 +1,11 @@
 # xshell
 ----
 -- Disclaimer:
-:: This program is a modified version of the one made by Suprotik Dey (LinkedIn :: https://www.linkedin.com/in/suprotik-dey-368706127/)
-:: The source is available at the website www.geeksforgeeks.org :: https://www.geeksforgeeks.org/making-linux-shell-c/
+:: This program is a modified work from multiple scources listed below under the next section
 :: Please read the "LICENSE" for more information
+----
+-- Sources:
+:: Website www.geeksforgeeks.org :: https://www.geeksforgeeks.org/making-linux-shell-c/, thank you to Suprotik Dey (LinkedIn :: https://www.linkedin.com/in/suprotik-dey-368706127/)
 ----
 -- Description:
 :: "xshell" or "xsh" is an Open Source Unix Shell built in C by forking a child process to execute the job, using GNU libreadline-dev, execvp system call for non built in commands and allows piping and background processes.

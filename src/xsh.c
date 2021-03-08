@@ -83,13 +83,13 @@ void tree(char *basePath, const int root)
             for (i=0; i<root; i++) 
             {
                 if (i%2 == 0 || i == 0)
-                    printf("%c", 179);
+                    printf("--::");
                 else
-                    printf(" ");
+                    printf("");
 
             }
 
-            printf("%c%c%s\n", 195, 196, dp->d_name);
+            printf("--::%s\n", dp->d_name);
 
             strcpy(path, basePath);
             strcat(path, "/");
@@ -197,7 +197,7 @@ void openHelp()
 // Function to execute builtin commands 
 int ownCmdHandler(char** parsed) 
 { 
-    int NoOfOwnCmds = 4, i, switchOwnArg = 0; 
+    int NoOfOwnCmds = 6, i, switchOwnArg = 0; 
     char* ListOfOwnCmds[NoOfOwnCmds]; 
     char* username;
   
@@ -238,9 +238,11 @@ int ownCmdHandler(char** parsed)
             username); 
         return 1;
     case 5:
-        clear(); 
+        clear();
+        return 1;
     case 6:
     	tree(".", 0);
+        return 1;
     default: 
         break; 
     } 
