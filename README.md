@@ -5,7 +5,9 @@
 :: Please read the "LICENSE" for more information
 ----
 -- Sources:
-:: Website www.geeksforgeeks.org :: https://www.geeksforgeeks.org/making-linux-shell-c/, thank you to Suprotik Dey (LinkedIn :: https://www.linkedin.com/in/suprotik-dey-368706127/)
+:: Blog :: www.geeksforgeeks.org :: https://www.geeksforgeeks.org/making-linux-shell-c/, thank you to Suprotik Dey (LinkedIn :: https://www.linkedin.com/in/suprotik-dey-368706127/)
+:: Website :: https://theasciicode.com.ar/extended-ascii-code/box-drawings-single-line-vertical-right-character-ascii-code-195.html
+:: Blog :: https://codeforwin.org/2018/03/c-program-to-list-all-files-in-a-directory-recursively.html, thank you to Pankaj (Twitter :: https://twitter.com/pankajprakashh)
 ----
 -- Description:
 :: "xshell" or "xsh" is an Open Source Unix Shell built in C by forking a child process to execute the job, using GNU libreadline-dev, execvp system call for non built in commands and allows piping and background processes.
