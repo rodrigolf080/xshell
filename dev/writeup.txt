@@ -1,0 +1,16 @@
+
+<<---- Start of the run ---->>
+<<---- Mon  8 Mar 2021 13:56:46 GMT ---->>
+
+rm: xsh: No such file or directory
+make: *** [clean] Error 1
+
+<<---- End of the run ---->>
+
+
+<<---- Start of the run ---->>
+<<---- Mon  8 Mar 2021 14:11:20 GMT ---->>
+
+
+<<---- End of the run ---->>
+

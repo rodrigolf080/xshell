@@ -64,7 +64,6 @@ void printDir()
  * @param basePath Base path to traverse directory
  * @param root     Integer representing indention for current directory
  */
-
 void tree(char *basePath, const int root)
 {
     int i;
@@ -101,6 +100,21 @@ void tree(char *basePath, const int root)
     closedir(dir);
 }
 
+/**
+ * batchExec executes every line a batch file just like an individual command
+ * 
+ * @param batchfile     File to read and parse commands from
+ */
+// void batchExec()
+// {
+//     // for each line in the batch file
+//     // you have to read it, parse it and execute it as a command
+//     // when end of file is reached quit the program
+//     FILE *fp;
+
+//     fp = fopen()
+
+// }
 
 void execArgs(char** parsed) 
 { 
@@ -112,7 +126,7 @@ void execArgs(char** parsed)
         return; 
     } else if (pid == 0) { 
         if (execvp(parsed[0], parsed) < 0) { 
-            printf("\nCould not execute command error:0\n"); 
+            printf("\nCould not execute command error: 0\n"); 
         } 
         exit(0); 
     } else { 
@@ -121,6 +135,7 @@ void execArgs(char** parsed)
         return; 
     } 
 } 
+
 
 // Function where the piped system commands is executed 
 void execArgsPiped(char** parsed, char** parsedpipe) 
@@ -147,7 +162,7 @@ void execArgsPiped(char** parsed, char** parsedpipe)
         close(pipefd[1]); 
   
         if (execvp(parsed[0], parsed) < 0) { 
-            printf("\nCould not execute command error:1\n"); 
+            printf("\nCould not execute command error: 1\n"); 
             exit(0); 
         } 
     } else { 
@@ -166,12 +181,12 @@ void execArgsPiped(char** parsed, char** parsedpipe)
             dup2(pipefd[0], STDIN_FILENO); 
             close(pipefd[0]); 
             if (execvp(parsedpipe[0], parsedpipe) < 0) { 
-                printf("\nCould not execute command error:2..\n"); 
+                printf("\nCould not execute command error: 2..\n"); 
                 exit(0); 
             } 
         } else { 
             // parent executing, waiting for two children 
-            wait(NULLi); 
+            wait(NULL); 
             wait(NULL); 
         } 
     } 
@@ -182,14 +197,15 @@ void openHelp()
 { 
     puts("\n***WELCOME TO XSH HELP***"
         "\nList of Commands supported:"
-        "\n>cls"
-        "\n>cd"
-        "\n>ls"
-        "\n>quit"
-        "\n>dir"
-        "\n>all other general commands available in UNIX shell"
+        "\n>cls - clear screen"
+        "\n>cd - change directory"
+        "\n>quit - quit shell"
+        "\n>dir - list files recursively starting"
+        " on the current directory in a tree-liek structure"
+        "\n>all other general system commands available in UNIX shell"
         "\n>pipe handling"
-        "\n>improper space handling\n"); 
+        "\n>improper space handling"
+        "\n>execute batchfiles one at a time\n"); 
   
     return; 
 } 
@@ -305,33 +321,75 @@ int processString(char* str, char** parsed, char** parsedpipe)
         return 1 + piped; 
 } 
 
-int main() 
-{ 
-    char inputString[MAXCOM], *parsedArgs[MAXLIST]; 
-    char* parsedArgsPiped[MAXLIST]; 
-    int execFlag = 0; 
-    init_shell(); 
-  
+void execParsedArgs(char *inputString)
+{
+    char *parsedArgs[MAXLIST]; 
+    char *parsedArgsPiped[MAXLIST];
+    int execFlag = 0;
+    // process 
+    execFlag = processString(inputString, 
+    parsedArgs, parsedArgsPiped); 
+    // execflag returns zero if there is no command 
+    // or it is a builtin command, 
+    // 1 if it is a simple command 
+     // 2 if it is including a pipe. 
+
+    // execute 
+    if (execFlag == 1) {
+        execArgs(parsedArgs); 
+    }
+    if (execFlag == 2) {
+        execArgsPiped(parsedArgs, parsedArgsPiped);
+    }
+    //free(inputString);
+    //free(parsedArgsPiped);
+    //free(parsedArgs);
+    //free(execFlag);
+}
+
+void execScript(char **argv)
+{
+    FILE *fp;
+    char buf[1000];
+
+    if ((fp = fopen(argv[1], "r")) == NULL){
+        printf("File >>> %s <<< not found.\n", argv[1]);
+        printf("Quitting...\n\n");
+        exit(0);
+    }
+    else {
+        // open file and parse commands
+        printf("Executing from file...\n");
+        while (fgets(buf, 1000,fp) != NULL) {
+            // and execute command 
+            printf( "$%s\n" , buf); 
+        }
+        fclose(fp);
+        exit(0);
+    }   
+
+}
+
+int main(int argc, char **argv) 
+{   
+    char inputString[MAXCOM];
+    // check if program was called with a script file to be opened and executed
+    if (argv[1] != NULL) {
+        execScript(argv);
+    }
+
+    // shell greeting
+    init_shell();
+
     while (1) { 
         // print shell line 
         printDir(); 
         // take input 
-        if (takeInput(inputString)) 
-            continue; 
-        // process 
-        execFlag = processString(inputString, 
-        parsedArgs, parsedArgsPiped); 
-        // execflag returns zero if there is no command 
-        // or it is a builtin command, 
-        // 1 if it is a simple command 
-        // 2 if it is including a pipe. 
-  
-        // execute 
-        if (execFlag == 1) 
-            execArgs(parsedArgs); 
-  
-        if (execFlag == 2) 
-            execArgsPiped(parsedArgs, parsedArgsPiped); 
+        if (takeInput(inputString))     
+        continue; 
+        // handle commands
+        execParsedArgs(inputString);
+
     } 
     return 0; 
 } 

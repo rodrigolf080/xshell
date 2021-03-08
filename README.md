@@ -21,8 +21,13 @@
 :: $ chmod +x run
 :: $ ./run
 ----
--- Note:
+-- Notes:
 :: "run" is a bash script that compiles the program using gcc and a makefile, clears the screen and executes the binary lauching the shell
+:: File "dev" holds a running script to catch compilation errors for development
+:: Error list
+:: :: 0 -- failed to cast execvp on arguments
+:: :: 1 -- failed to cast execvp on piped arguments at the write end
+:: :: 2 -- failed to cast execvp at the read end
 ----
 -- Commands:
 :: exit :: quit the program
