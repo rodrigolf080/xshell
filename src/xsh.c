@@ -6,6 +6,7 @@
 #include<sys/wait.h> 
 #include<readline/readline.h> 
 #include<readline/history.h> 
+#include<dirent.h> 
 
 #define MAXCOM 1000 // max number of chars supported 
 #define MAXLIST 100 // max number of commands supported 
@@ -28,6 +29,7 @@ void init_shell()
     sleep(3); 
     clear(); 
 } 
+
 
 // Function to take input 
 int takeInput(char* str) 
@@ -55,12 +57,50 @@ void printDir()
     printf("%s", cwd); 
 } 
 
-// Function to print Path recursively starting on Current Dir/
-void printPath()
+/**
+ * Tree, prints all files and sub-directories of a given 
+ * directory in tree structure.
+ * 
+ * @param basePath Base path to traverse directory
+ * @param root     Integer representing indention for current directory
+ */
+
+void tree(char *basePath, const int root)
 {
-	// get pwd
-	// print
+    int i;
+    char path[1000];
+    struct dirent *dp;
+    DIR *dir = opendir(basePath);
+
+    // Unable to open directory
+    if (!dir)
+        return;
+
+    while ((dp = readdir(dir)) != NULL)
+    {
+        if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
+        {
+            for (i=0; i<root; i++) 
+            {
+                if (i%2 == 0 || i == 0)
+                    printf("%c", 179);
+                else
+                    printf(" ");
+
+            }
+
+            printf("%c%c%s\n", 195, 196, dp->d_name);
+
+            strcpy(path, basePath);
+            strcat(path, "/");
+            strcat(path, dp->d_name);
+            tree(path, root + 2);
+        }
+    }
+
+    closedir(dir);
 }
+
 
 void execArgs(char** parsed) 
 { 
@@ -68,15 +108,15 @@ void execArgs(char** parsed)
     pid_t pid = fork();  
   
     if (pid == -1) { 
-        printf("\nFailed forking child.."); 
+        printf("\nFailed forking child"); 
         return; 
     } else if (pid == 0) { 
         if (execvp(parsed[0], parsed) < 0) { 
-            printf("\nCould not execute command..\n"); 
+            printf("\nCould not execute command error:0\n"); 
         } 
         exit(0); 
     } else { 
-        // waiting for child to terminate 
+        // Waiting for child to terminate 
         wait(NULL);  
         return; 
     } 
@@ -107,7 +147,7 @@ void execArgsPiped(char** parsed, char** parsedpipe)
         close(pipefd[1]); 
   
         if (execvp(parsed[0], parsed) < 0) { 
-            printf("\nCould not execute command 1..\n"); 
+            printf("\nCould not execute command error:1\n"); 
             exit(0); 
         } 
     } else { 
@@ -126,7 +166,7 @@ void execArgsPiped(char** parsed, char** parsedpipe)
             dup2(pipefd[0], STDIN_FILENO); 
             close(pipefd[0]); 
             if (execvp(parsedpipe[0], parsedpipe) < 0) { 
-                printf("\nCould not execute command 2..\n"); 
+                printf("\nCould not execute command error:2..\n"); 
                 exit(0); 
             } 
         } else { 
@@ -159,7 +199,7 @@ int ownCmdHandler(char** parsed)
 { 
     int NoOfOwnCmds = 4, i, switchOwnArg = 0; 
     char* ListOfOwnCmds[NoOfOwnCmds]; 
-    char* username; 
+    char* username;
   
     ListOfOwnCmds[0] = "exit"; 
     ListOfOwnCmds[1] = "cd"; 
@@ -200,7 +240,7 @@ int ownCmdHandler(char** parsed)
     case 5:
         clear(); 
     case 6:
-    	printPath();
+    	tree(".", 0);
     default: 
         break; 
     } 
