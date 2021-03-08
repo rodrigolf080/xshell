@@ -350,7 +350,8 @@ void execParsedArgs(char *inputString)
 void execScript(char **argv)
 {
     FILE *fp;
-    char buf[1000];
+    char buffer[1000];
+    char* buf;
 
     if ((fp = fopen(argv[1], "r")) == NULL){
         printf("File >>> %s <<< not found.\n", argv[1]);
@@ -360,15 +361,19 @@ void execScript(char **argv)
     else {
         // open file and parse commands
         printf("Executing from file...\n");
-        while (fgets(buf, 1000,fp) != NULL) {
-            // and execute command 
-            printf( "$%s\n" , buf); 
+        while (fgets(buffer, 1000,fp) != NULL) {
+            buf = buffer;
+            add_history(buf);
+            // and execute command
+            execParsedArgs(buf);
+            //printf( "%s\n" , buffer); 
         }
         fclose(fp);
         exit(0);
     }   
 
 }
+
 
 int main(int argc, char **argv) 
 {   
