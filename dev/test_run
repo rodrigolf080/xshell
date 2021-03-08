@@ -1,0 +1,6 @@
+#!/bin/bash
+echo -e "\n<<---- Start of the run ---->>" >> writeup.txt 
+echo -e "<<---- $(date) ---->>\n" >> writeup.txt &&
+cd .. &&
+./run 2>>dev/writeup.txt
+echo -e "\n<<---- End of the run ---->>\n" >> dev/writeup.txt

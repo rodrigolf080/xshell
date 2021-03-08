@@ -2,7 +2,7 @@
 all: xsh
 
 xsh: xsh.c
-	gcc -o xsh xsh.c -lreadline
+	gcc -Wall -Wextra -o xsh xsh.c -lreadline
 
 .PHONY: clean
 clean:

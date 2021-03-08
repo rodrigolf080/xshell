@@ -171,7 +171,7 @@ void execArgsPiped(char** parsed, char** parsedpipe)
             } 
         } else { 
             // parent executing, waiting for two children 
-            wait(NULL); 
+            wait(NULLi); 
             wait(NULL); 
         } 
     } 
@@ -185,7 +185,7 @@ void openHelp()
         "\n>cls"
         "\n>cd"
         "\n>ls"
-        "\n>exit"
+        "\n>quit"
         "\n>dir"
         "\n>all other general commands available in UNIX shell"
         "\n>pipe handling"
@@ -201,7 +201,7 @@ int ownCmdHandler(char** parsed)
     char* ListOfOwnCmds[NoOfOwnCmds]; 
     char* username;
   
-    ListOfOwnCmds[0] = "exit"; 
+    ListOfOwnCmds[0] = "quit"; 
     ListOfOwnCmds[1] = "cd"; 
     ListOfOwnCmds[2] = "help"; 
     ListOfOwnCmds[3] = "hello";
