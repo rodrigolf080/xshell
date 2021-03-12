@@ -1,9 +1,7 @@
 .PHONY: all
-all: xsh
-
-xsh: xsh.c
-	gcc -Wall -Wextra -o xsh xsh.c -lreadline
+xsh: xsh.c utils.c
+	gcc -Wall -Wextra xsh.c utils.c -lreadline -o xsh
 
 .PHONY: clean
 clean:
-	rm xsh 
+	rm -f xsh 

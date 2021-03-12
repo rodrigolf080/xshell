@@ -14,3 +14,14 @@ make: *** [clean] Error 1
 
 <<---- End of the run ---->>
 
+
+<<---- Start of the run ---->>
+<<---- Fri 12 Mar 2021 17:05:04 GMT ---->>
+
+xsh.c:13:14: warning: unused parameter 'argc' [-Wunused-parameter]
+int main(int argc, char **argv) 
+             ^
+1 warning generated.
+
+<<---- End of the run ---->>
+

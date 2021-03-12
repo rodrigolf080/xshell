@@ -1,3 +1,2 @@
 ls
-echo "hello";
-ls;
+dir
