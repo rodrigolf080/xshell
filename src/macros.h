@@ -18,7 +18,7 @@ void openHelp();
 int ownCmdHandler(char **parsed); 
 int parsePipe(char *str, char **strpiped); 
 void parseSpace(char* str, char** parsed);
-int processString(char *str, char **parsed, char **parsedpipe);
+int processString(char *str, char **parsed, char **parsedpipe, char **parsedArgsIORedirected); 
 void execParsedArgs(char *inputString);
 void execScript(char **script, char *inputString);
 

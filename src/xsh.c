@@ -30,7 +30,6 @@ int main(int argc, char **argv)
         if (takeInput(inputString))     
         continue; 
         // handle commands
-        printf( "%s" , inputString);
         execParsedArgs(inputString);
     } 
     return 0; 

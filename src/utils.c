@@ -172,10 +172,13 @@ void execArgsPiped(char **parsed, char **parsedpipe)
     int pipefd[2];  
     pid_t p1, p2; 
   
+  	// return -1 on failure
     if (pipe(pipefd) < 0) { 
         printf("\nPipe could not be initialized\n"); 
         return; 
     } 
+    // return child :: 0 success
+    // return parent :: 1 success -1 failure
     p1 = fork(); 
     if (p1 < 0) { 
         printf("\nCould not fork\n"); 
@@ -214,8 +217,7 @@ void execArgsPiped(char **parsed, char **parsedpipe)
                 exit(0); 
             } 
         } else { 
-            // parent executing, waiting for two children 
-            wait(NULL); 
+            // parent executing, waiting for last child
             wait(NULL); 
         } 
     } 
@@ -332,6 +334,18 @@ int parsePipe(char *str, char **strpiped)
     } 
 } 
 
+/*
+ * Look for pipe in a string
+ * If found split the commands and remove the pipe
+ *
+ * @param str :: command string before pipe
+ * @param strpiped :: command array after pipe is found
+ */
+int parseIORedirectors(char *str, char **strRedirected) 
+{ 
+    return 0;
+} 
+
 
 /*
  * Look for spaces in input string
@@ -365,33 +379,36 @@ void parseSpace(char* str, char** parsed)
  * @param parsed :: array of commands
  * @param parsed :: array of commands
  */
-int processString(char *str, char **parsed, char **parsedpipe) 
+int processString(char *str, char **parsed, char **parsedpipe, char **parsedArgsIORedirected) 
 { 
   
     char* strpiped[2];
-    // char* strstdin[2];
-    // char* strstdout[2];
+    char* strRedirected[2];
 
     int piped = 0; 
-    // int stdin = 0;
-    // int stdout = 0;
+    int redirected = 0;
+
   
     piped = parsePipe(str, strpiped);
-    // stdin =  parseStdin(str, strstdin);
-    // stdout = parseStdout(str, strstdout);
-  
+    redirected = parseIORedirectors(str, strRedirected);
+
     if (piped) { 
         parseSpace(strpiped[0], parsed); 
         parseSpace(strpiped[1], parsedpipe); 
   
     } else { 
-  
-        parseSpace(str, parsed); 
+    	if (redirected) {
+    		parseSpace(strRedirected[0], parsed); 
+        	parseSpace(strRedirected[1], parsedArgsIORedirected);
+    	} else {
+    		parseSpace(str, parsed); 
+    	}
     } 
   
     if (ownCmdHandler(parsed))
         return 0; 
     else
+    	// returns 1 on simple command and 2 on piped command
         return 1 + piped; 
 } 
 
@@ -405,10 +422,12 @@ void execParsedArgs(char *inputString)
 {
     char *parsedArgs[MAXLIST]; 
     char *parsedArgsPiped[MAXLIST];
+    char *parsedArgsIORedirected[MAXLIST];
+
     int execFlag = 0;
     // process 
     execFlag = processString(inputString, 
-    parsedArgs, parsedArgsPiped); 
+    parsedArgs, parsedArgsPiped, parsedArgsIORedirected); 
     // execflag returns zero if there is no command 
     // or it is a builtin command, 
     // 1 if it is a simple command 
@@ -421,6 +440,15 @@ void execParsedArgs(char *inputString)
     if (execFlag == 2) {
         execArgsPiped(parsedArgs, parsedArgsPiped);
     }
+    if (execFlag == 3) {
+        //execArgsPiped(parsedArgs, parsedArgsPiped);
+        printf("I was redirected with a return value of 3!\n");
+    }
+    if (execFlag == 4) {
+        //execArgsPiped(parsedArgs, parsedArgsPiped);
+        printf("I was redirected with a return value of 3!\n");
+    }
+
 }
 
 /*
