@@ -334,17 +334,6 @@ int parsePipe(char *str, char **strpiped)
     } 
 } 
 
-/*
- * Look for pipe in a string
- * If found split the commands and remove the pipe
- *
- * @param str :: command string before pipe
- * @param strpiped :: command array after pipe is found
- */
-int parseIORedirectors(char *str, char **strRedirected) 
-{ 
-    return 0;
-} 
 
 
 /*
@@ -379,30 +368,22 @@ void parseSpace(char* str, char** parsed)
  * @param parsed :: array of commands
  * @param parsed :: array of commands
  */
-int processString(char *str, char **parsed, char **parsedpipe, char **parsedArgsIORedirected) 
+int processString(char *str, char **parsed, char **parsedpipe) 
 { 
   
     char* strpiped[2];
-    char* strRedirected[2];
 
     int piped = 0; 
-    int redirected = 0;
-
   
     piped = parsePipe(str, strpiped);
-    redirected = parseIORedirectors(str, strRedirected);
+ 
 
     if (piped) { 
         parseSpace(strpiped[0], parsed); 
         parseSpace(strpiped[1], parsedpipe); 
   
-    } else { 
-    	if (redirected) {
-    		parseSpace(strRedirected[0], parsed); 
-        	parseSpace(strRedirected[1], parsedArgsIORedirected);
-    	} else {
+    } else {
     		parseSpace(str, parsed); 
-    	}
     } 
   
     if (ownCmdHandler(parsed))
@@ -422,12 +403,11 @@ void execParsedArgs(char *inputString)
 {
     char *parsedArgs[MAXLIST]; 
     char *parsedArgsPiped[MAXLIST];
-    char *parsedArgsIORedirected[MAXLIST];
 
     int execFlag = 0;
     // process 
     execFlag = processString(inputString, 
-    parsedArgs, parsedArgsPiped, parsedArgsIORedirected); 
+    parsedArgs, parsedArgsPiped);
     // execflag returns zero if there is no command 
     // or it is a builtin command, 
     // 1 if it is a simple command 
@@ -439,14 +419,6 @@ void execParsedArgs(char *inputString)
     }
     if (execFlag == 2) {
         execArgsPiped(parsedArgs, parsedArgsPiped);
-    }
-    if (execFlag == 3) {
-        //execArgsPiped(parsedArgs, parsedArgsPiped);
-        printf("I was redirected with a return value of 3!\n");
-    }
-    if (execFlag == 4) {
-        //execArgsPiped(parsedArgs, parsedArgsPiped);
-        printf("I was redirected with a return value of 3!\n");
     }
 
 }
