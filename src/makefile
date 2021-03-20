@@ -1,7 +1,7 @@
 .PHONY: all
 xsh: xsh.c utils.c
 	gcc xsh.c utils.c -lreadline -o xsh
-
+	
 .PHONY: clean
 clean:
 	rm -f xsh
