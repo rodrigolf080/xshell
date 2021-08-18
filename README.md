@@ -1,35 +1,41 @@
 # myshell
-----
--- Sources:
-:: Website :: https://theasciicode.com.ar/extended-ascii-code/box-drawings-single-line-vertical-right-character-ascii-code-195.html
-:: GitHub Page :: https://siongui.github.io/2013/01/09/c-remove-string-trailing-newline-carriage-return/
-:: Website :: codeforwin.org :: Articles and Resources
-:: Website :: www.geeksforgeeks.org :: Articles and Resources
-----
--- Description:
-:: myshell is a Unix Sihell built in C by forking a child process to execute the job, using GNU libreadline-dev, execvp system call for non built in commands and allows piping and background processes.
-----
--- Dependencies:
-:: GNU Readline libreadline-dev package
-:: $ sudo apt-get install libreadline-dev
-:: $ sudo pacman -S libreadline
-----
--- Quick Start:
-:: $ chmod +x run
-:: $ ./run
-----
--- Notes:
-:: Background processing should be achievied by allowing the user to interact with the shell stdin and stdout (and stderr) while the child process is executing and when its done bringing the  stdout and stderr to the foreground
-:: IO redirection should be achieved by parsing user input and duplicating the file descriptors for stdin and/or stdin accordingly to the files following the read write append (<, >, >>) 
-:: Error list for exec:
-:: :: 0 -- failed to cast execvp on arguments
-:: :: 1 -- failed to cast execvp on piped arguments at the write end
-:: :: 2 -- failed to cast execvp at the read end
-----
--- Commands:
-:: exit :: quit the program
-:: cd :: C function to change directory chdir()
-:: help :: displays the list of commands and functions
-:: clear :: prints a string to clear the screen
-:: dir :: print files and directories
-:: print :: print a comment
+Command line interactive shell build in C
+
+- Once executed, myshell displays a command line interface to the terminal. If executed with a bathfile, myshell should execute each line of the file just like if it received input from the CLI.
+
+- Executes buildin commands as well as C System commands
+
+- User input is expected in the form:
+	command [args]
+	command - is the program name to be executed by the shell
+	args - is the array of arguments run with the program, some commands may not need args, like 'help' and 'quit'.
+
+'help' - prints list of builin commands
+'quit' - exit myshell
+'dir' - list contents of current working directory
+'cls' - clear screen
+'copy' - duplicate first argument file name and place it in path/newName
+'md' - create new directory
+'rd' - remove empty directory
+'print' - echo arguments to stdout
+
+Resources :
+- https://brennan.io/2015/01/16/write-a-shell-in-c/ 
+- https://www.cs.cornell.edu/courses/cs414/2004su/homework/shell/shell.html 
+- https://www.gnu.org/software/bash/manual/bash.pdf
+
+Research:
+- Programs are executed by forking the shell processed and executing the program on the new child process, which is killed at end of execution;
+- Processes are kept running in a child process until terminated, while myshell keeps running as a parent process;
+- Background processes run on the child node and without displaying output to the parent process;
+- I/O redirection is implemented by changing the stdin and stdout of the program executed;
+- Memory allocation, rellocation and memory management in C using buffers;
+- stdin, stdout and stderr manipulation;
+- User input reading, String slicing and splitting in C using string getline and string tokens;
+- How to execute System commands in C;
+- Read and write to a CLI using C;
+
+To do:
+ - add I/O redirection (>>, <, >) - change stdin and stdout on child forking
+ - background execution - allow child processes to run on the bg at the same time as user interacts with parent ndoe
+ - add piping - pipe stdout of 1st program to stdin of second, execute them in different processes with fork
